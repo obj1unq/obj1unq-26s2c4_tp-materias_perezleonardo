@@ -37,6 +37,14 @@ class Materia {
   method listaDeEspera(){
     return listaDeEspera
   } 
+
+  method estaInscripto(alumno){
+    return inscriptos.contains(alumno)
+  }
+
+  method estaEnListaDeEspera(alumno){
+    return listaDeEspera.contains(alumno)
+  }
 }
 
 class Aprobacion {
@@ -74,6 +82,23 @@ class Alumno{
     (not materia.inscriptos().contains(self)) &&
     (materia.requisitos().all({ requisito => self.estaAprobada(requisito)}))
     
+  }
+
+  //Está horrible, pero no se me ocurre algo mejor
+  method materiasInscripto(){
+    return self.materiasDeCarreras().filter({ materia => materia.estaInscripto(self)})
+  }
+  //Está también está horrible, tampoco se me ocurre algo mejor
+
+  method materiasEnListaDeEspera() {
+    return self.materiasDeCarreras().filter({ materia => materia.estaEnListaDeEspera(self)}) 
+  }
+  
+  //Podría encapsular en filtrarMaterias(filtro), pero no me parece relevante
+
+  //Esto esta peor, no se me cae una idea.
+  method materiasQuePuedeInscribirse(carrera){
+    return if (carreras.contains(carrera)) carrera.materias().filter({ materia => self.puedeAnotarseA(materia)}) else self.error("El alumno no cursa esa carrera")
   }
  
 }
