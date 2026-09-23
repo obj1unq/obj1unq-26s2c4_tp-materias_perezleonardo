@@ -1,5 +1,11 @@
 class Carrera{
-  const  property materias = []
+  const materias = []
+  method materias(){
+    return materias
+  }
+  method planDeEstudios(listaDeMaterias) {
+    materias.addAll(listaDeMaterias)
+  }
 
 }
 
@@ -7,7 +13,7 @@ class Materia {
   const property carrera
   const property requisitos = []
   const inscriptos = [] 
-  const property cupo
+  const property cupo = 10
   const listaDeEspera = [] 
 
   method inscribir(alumno){
@@ -102,3 +108,5 @@ class Alumno{
   }
  
 }
+
+

@@ -1,9 +1,89 @@
-import example.pepita
+import example.*
 
-describe "group of tests for pepita" {
+describe "test requisitos" {
+  const programacion = new Carrera()
+  const medicina = new Carrera()
+  const epl = new Materia(carrera = programacion)
+  const mate1 = new Materia(carrera = programacion)
+  const obj1 = new Materia(carrera = programacion)
+  const bbdd = new Materia(carrera = programacion)
+  const obj2 = new Materia(carrera = programacion,requisitos =[obj1,mate1], cupo = 3)
+  const obj3 = new Materia(carrera = programacion,requisitos =[obj2,bbdd])
+  const progConc = new Materia(carrera = programacion,requisitos =[obj1,bbdd])
+  const bio1 = new Materia(carrera = programacion)
+  const bio2 = new Materia(carrera = programacion,requisitos =[bio1])
+  const qca = new Materia(carrera = programacion)
 
-  test "pepita has initial energy" {
-    assert.equals(100, pepita.energy())
+
+  const roque = new Alumno(carreras=[programacion,medicina])
+  const luisa = new Alumno(carreras=[programacion])
+  const romina = new Alumno(carreras=[programacion])
+  const alicia = new Alumno(carreras=[programacion])
+  const ana = new Alumno(carreras=[programacion])  
+
+method initialize() {
+
+  //Creamos el plan de estudio
+  programacion.planDeEstudios([epl,mate1,obj1,bbdd,obj2,obj3,progConc])
+  medicina.planDeEstudios([bio1,bio2,qca])
+ 
+//aprobadas
+  
+  roque.registrarAprobada(epl, 4)
+  roque.registrarAprobada(mate1, 4)
+  roque.registrarAprobada(obj1, 4)
+  roque.registrarAprobada(bbdd, 4)
+  roque.registrarAprobada(qca, 4)
+  roque.registrarAprobada(bio1, 4)
+
+  luisa.registrarAprobada(epl, 4)
+  luisa.registrarAprobada(mate1, 4)
+  luisa.registrarAprobada(obj1, 4)
+
+  romina.registrarAprobada(epl, 4)
+  romina.registrarAprobada(mate1, 4)
+  romina.registrarAprobada(obj1, 4)
+
+  alicia.registrarAprobada(epl, 4)
+  alicia.registrarAprobada(mate1, 4)
+  alicia.registrarAprobada(obj1, 4)
+
+  ana.registrarAprobada(epl, 4)
+
+}
+  test "Roque puede inscribirse en obj2" {
+    assert.equals(true, roque.puedeAnotarseA(obj2))
   }
+  test "Roque no puede inscribirse en obj3" {
+    assert.equals(false, roque.puedeAnotarseA(obj3))
+  }
+  test "Roque no puede inscribirse en obj1" {
+    assert.equals(false, roque.puedeAnotarseA(obj1))
+  }
+  test "Roque puede inscribirse, en la carrera de Programacion, a Objetos 2 y Programación Concurrente" {
+    assert.equals([obj2,progConc], roque.materiasQuePuedeInscribirse(programacion))
+  }
+  test "Roque puede inscribirse, en la carrera de Medicina, a biología 2" {
+    assert.equals([bio2], roque.materiasQuePuedeInscribirse(medicina))
+  }
+  test "Luisa, Romina, Alicia y Roque se inscriben a objetos 2. Solo Roque queda en espera" {
+    obj2.inscribir(luisa)
+    obj2.inscribir(romina)
+    obj2.inscribir(alicia)
+    obj2.inscribir(roque)
+    assert.equals(true, obj2.estaInscripto(luisa))
+    assert.equals(true, obj2.estaInscripto(romina))
+    assert.equals(true, obj2.estaInscripto(alicia))
+    assert.equals(true, obj2.estaEnListaDeEspera(roque))
+  }
+  test "Al dar de baja a Romina de objetos 2, Roque pasa a estar confirmado"{
+    obj2.inscribir(luisa)
+    obj2.inscribir(romina)
+    obj2.inscribir(alicia)
+    obj2.inscribir(roque)
+    obj2.baja(romina)
+    assert.equals(true, obj2.estaInscripto(roque)) // deberia chequear que romina no este?
+  }
+
 
 }
